@@ -10,23 +10,42 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        :root { --navy: #1B3A6B; --navy-mid: #2D5F8A; --navy-light: #4A90C4; --navy-pale: #E8F0F8; --gold: #C9922A; }
-        body { background-color: #F0F4F8; font-family: 'Segoe UI', 'Sarabun', sans-serif; }
-        .navbar-main { background: var(--navy); box-shadow: 0 2px 12px rgba(27,58,107,0.2); }
+        :root { --navy: #173b67; --navy-deep: #102c4d; --navy-mid: #2d628f; --navy-light: #4a90c4; --navy-pale: #edf4fa; --gold: #c9922a; --ink: #203047; --line: #dce5ee; --shadow: 0 14px 34px rgba(18,49,82,.1); }
+        body { background: #f5f8fb; color: var(--ink); font-family: 'Segoe UI', 'Sarabun', sans-serif; }
+        .navbar-main { background: linear-gradient(110deg, var(--navy-deep), var(--navy)); box-shadow: 0 4px 18px rgba(16,44,77,.2); }
         .navbar-main .navbar-brand { color: white !important; font-weight: 700; }
         .navbar-main .nav-user { color: rgba(255,255,255,0.85); font-size: 0.9rem; }
-        .hero-bar { background: linear-gradient(90deg, var(--navy) 0%, var(--navy-mid) 100%); color: white; padding: 2rem 0; border-bottom: 4px solid var(--gold); }
-        .stat-card { border: none; border-radius: 12px; box-shadow: 0 4px 16px rgba(27,58,107,0.1); transition: transform 0.2s; overflow: hidden; }
+        .hero-bar { background: linear-gradient(120deg, var(--navy-deep), var(--navy-mid)); color: white; padding: 2.5rem 0 3.5rem; border-bottom: 4px solid var(--gold); position: relative; overflow: hidden; }
+        .hero-bar::after { content: ''; position: absolute; width: 300px; height: 300px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; right: -80px; top: -160px; }
+        .dashboard-content { margin-top: -26px; position: relative; z-index: 1; }
+        .stat-card { border: 1px solid rgba(220,229,238,.9); border-radius: 14px; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow .2s; overflow: hidden; }
         .stat-card:hover { transform: translateY(-3px); }
         .stat-card .card-body { padding: 1.5rem; }
         .stat-icon { width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .action-btn { border-radius: 12px; padding: 2rem; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.2s; border: none; text-decoration: none; }
+        .action-btn { border-radius: 14px; padding: 1.65rem; font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: all 0.2s; border: none; text-decoration: none; box-shadow: 0 8px 22px rgba(18,49,82,.09); }
         .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
         .btn-request { background: var(--navy); color: white; }
         .btn-request:hover { background: var(--navy-mid); color: white; }
         .btn-track { background: white; color: var(--navy); border: 2px solid var(--navy-light); }
         .btn-track:hover { background: var(--navy-pale); color: var(--navy); }
-        footer { background: var(--navy); color: rgba(255,255,255,0.6); }
+        footer { background: var(--navy-deep); color: rgba(255,255,255,0.6); }
+        .action-arrow { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.16); }
+        .ai-launcher { position: fixed; right: 24px; bottom: 24px; z-index: 1000; width: 58px; height: 58px; border: 0; border-radius: 50%; background: var(--gold); color: var(--navy-deep); box-shadow: 0 10px 24px rgba(147,96,11,.3); transition: transform .2s, box-shadow .2s; }
+        .ai-launcher:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 30px rgba(147,96,11,.4); }
+        .ai-panel { position: fixed; right: 24px; bottom: 94px; z-index: 999; width: min(calc(100% - 32px), 380px); height: min(560px, calc(100vh - 120px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: white; box-shadow: 0 20px 55px rgba(16,44,77,.22); opacity: 0; pointer-events: none; transform: translateY(12px) scale(.98); transition: .2s ease; }
+        .ai-panel.is-open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+        .ai-panel-header { padding: 16px 18px; color: white; background: linear-gradient(110deg, var(--navy-deep), var(--navy-mid)); }
+        .ai-messages { flex: 1; overflow-y: auto; padding: 16px; background: #f7f9fc; }
+        .ai-message { max-width: 86%; margin-bottom: 12px; padding: 10px 12px; border-radius: 12px; font-size: .9rem; line-height: 1.55; white-space: pre-wrap; }
+        .ai-message.bot { background: white; border: 1px solid var(--line); color: var(--ink); border-top-left-radius: 4px; }
+        .ai-message.user { margin-left: auto; background: var(--navy); color: white; border-top-right-radius: 4px; }
+        .ai-suggestions { display: flex; gap: 6px; overflow-x: auto; padding: 0 16px 10px; background: #f7f9fc; }
+        .ai-suggestion { flex: 0 0 auto; border: 1px solid #c9d9e7; border-radius: 999px; background: white; color: var(--navy); padding: 6px 10px; font-size: .75rem; }
+        .ai-composer { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); background: white; }
+        .ai-input { min-width: 0; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; outline: none; }
+        .ai-input:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(45,98,143,.12); }
+        .ai-send { width: 40px; border: 0; border-radius: 10px; background: var(--navy); color: white; }
+        @media (max-width: 575.98px) { .hero-bar { padding: 2rem 0 3rem; } .dashboard-content { margin-top: -18px; } .ai-launcher { right: 16px; bottom: 16px; } .ai-panel { right: 16px; bottom: 86px; width: calc(100% - 32px); } }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -52,7 +71,7 @@
         </div>
     </div>
 
-    <div class="container px-4 mt-4 flex-grow-1">
+    <div class="container px-4 dashboard-content flex-grow-1">
         <!-- Stats -->
         <div class="row g-3 mb-4">
             <div class="col-12 col-md-4">
@@ -101,17 +120,25 @@
             <div class="col-12 col-md-6">
                 <a href="request.html" class="action-btn btn-request w-100">
                     <i class="bi bi-plus-circle-fill fs-3"></i>
-                    <span>แจ้งซ่อมบำรุง</span>
+                    <span>แจ้งซ่อมบำรุง</span><span class="action-arrow"><i class="bi bi-arrow-up-right"></i></span>
                 </a>
             </div>
             <div class="col-12 col-md-6">
                 <a href="check.html" class="action-btn btn-track w-100">
                     <i class="bi bi-search fs-3"></i>
-                    <span>ติดตามสถานะ</span>
+                    <span>ติดตามสถานะ</span><span class="action-arrow"><i class="bi bi-arrow-up-right"></i></span>
                 </a>
             </div>
         </div>
     </div>
+
+    <button class="ai-launcher" id="aiLauncher" type="button" aria-label="เปิดผู้ช่วย AI" title="ถามผู้ช่วย AI"><i class="bi bi-stars fs-4"></i></button>
+    <section class="ai-panel" id="aiPanel" aria-label="ผู้ช่วย AI">
+        <div class="ai-panel-header d-flex justify-content-between align-items-center"><div><div class="fw-bold"><i class="bi bi-stars me-2"></i>ผู้ช่วยระบบแจ้งซ่อม</div><small class="opacity-75">ถามข้อมูลการแจ้งซ่อมได้เลย</small></div><button class="btn btn-sm text-white" id="aiClose" type="button" aria-label="ปิดผู้ช่วย AI"><i class="bi bi-x-lg"></i></button></div>
+        <div class="ai-messages" id="aiMessages"><div class="ai-message bot">สวัสดีครับ ผมช่วยตอบคำถามเกี่ยวกับการแจ้งซ่อมและการติดตามสถานะได้ครับ</div></div>
+        <div class="ai-suggestions"><button class="ai-suggestion" type="button">แจ้งซ่อมอย่างไร?</button><button class="ai-suggestion" type="button">ติดตามงานซ่อม</button><button class="ai-suggestion" type="button">ติดต่อช่าง</button></div>
+        <form class="ai-composer" id="aiForm"><input class="ai-input flex-grow-1" id="aiInput" placeholder="พิมพ์คำถามของคุณ..." autocomplete="off"><button class="ai-send" type="submit" aria-label="ส่งคำถาม"><i class="bi bi-send-fill"></i></button></form>
+    </section>
 
     <footer class="py-4 mt-5">
         <div class="container px-4">
@@ -153,6 +180,28 @@
             localStorage.removeItem('user')
             showAuthOverlay('กำลังออกจากระบบ', '/login.html', 'logout')
         }
+
+        const aiPanel = document.getElementById('aiPanel')
+        const aiMessages = document.getElementById('aiMessages')
+        const aiInput = document.getElementById('aiInput')
+        document.getElementById('aiLauncher').addEventListener('click', () => { aiPanel.classList.toggle('is-open'); if (aiPanel.classList.contains('is-open')) aiInput.focus() })
+        document.getElementById('aiClose').addEventListener('click', () => aiPanel.classList.remove('is-open'))
+        document.querySelectorAll('.ai-suggestion').forEach(button => button.addEventListener('click', () => { aiInput.value = button.textContent; document.getElementById('aiForm').requestSubmit() }))
+        document.getElementById('aiForm').addEventListener('submit', async event => {
+            event.preventDefault()
+            const message = aiInput.value.trim()
+            if (!message) return
+            addAiMessage(message, 'user')
+            aiInput.value = ''
+            const loading = addAiMessage('กำลังค้นหาคำตอบ...', 'bot')
+            try {
+                const response = await fetch('/api/ai/chat', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ message }) })
+                const data = await response.json()
+                loading.textContent = data.reply || data.error || 'ยังไม่สามารถตอบคำถามได้ในขณะนี้'
+            } catch { loading.textContent = 'เชื่อมต่อผู้ช่วย AI ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง' }
+            aiMessages.scrollTop = aiMessages.scrollHeight
+        })
+        function addAiMessage(text, type) { const message = document.createElement('div'); message.className = `ai-message ${type}`; message.textContent = text; aiMessages.appendChild(message); aiMessages.scrollTop = aiMessages.scrollHeight; return message }
 
         loadStats()
     </script>
