@@ -11,35 +11,49 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        :root { --navy: #1B3A6B; --navy-mid: #2D5F8A; --navy-light: #4A90C4; --navy-pale: #E8F0F8; --gold: #C9922A; }
-        body { background-color: #F0F4F8; font-family: 'Segoe UI', 'Sarabun', sans-serif; }
-        .navbar-main { background: var(--navy); border-bottom: 3px solid var(--gold); }
-        .repair-card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(27,58,107,0.08); margin-bottom: 16px; transition: transform 0.15s; border-left: 4px solid transparent; }
-        .repair-card:hover { transform: translateY(-2px); }
-        .repair-card[data-status="pending"] { border-left-color: #1B3A6B; }
-        .repair-card[data-status="in_progress"] { border-left-color: #C9922A; }
-        .repair-card[data-status="done"] { border-left-color: #2E7D52; opacity: 0.8; }
-        .status-pill { font-size: 0.78rem; font-weight: 600; padding: 5px 14px; border-radius: 20px; }
-        .status-pending { background: #E8F0F8; color: #1B3A6B; }
-        .status-in_progress { background: #FEF3E2; color: #C9922A; }
-        .status-done { background: #E6F4EC; color: #2E7D52; }
-        .cat-badge { font-size: 0.75rem; background: var(--navy-pale); color: var(--navy); padding: 3px 10px; border-radius: 20px; font-weight: 600; }
-        .repair-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid #D1DCE8; }
-        .filter-btn { border-radius: 20px; font-size: 0.85rem; }
+        :root { --navy: #173b67; --navy-deep: #102c4d; --navy-mid: #2d628f; --navy-pale: #edf4fa; --gold: #c9922a; --ink: #203047; --muted: #6b7a8c; --line: #dce5ee; --shadow: 0 12px 30px rgba(18, 49, 82, 0.08); }
+        body { background: #f5f8fb; color: var(--ink); font-family: 'Segoe UI', 'Sarabun', sans-serif; }
+        .navbar-main { background: linear-gradient(110deg, var(--navy-deep), var(--navy)); border-bottom: 3px solid var(--gold); box-shadow: 0 4px 18px rgba(16,44,77,.18); }
+        .brand-mark { width: 42px; height: 42px; background: rgba(201,146,42,.18); border: 1px solid rgba(229,199,107,.45); }
+        .page-intro { background: linear-gradient(120deg, var(--navy-deep), var(--navy-mid)); color: white; padding: 28px 0 42px; position: relative; overflow: hidden; }
+        .page-intro::after { content: ''; position: absolute; width: 260px; height: 260px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; right: -70px; top: -120px; }
+        .content-wrap { margin-top: -22px; position: relative; z-index: 1; }
+        .summary-card { border: 1px solid rgba(220,229,238,.8); border-radius: 14px; box-shadow: var(--shadow); background: white; transition: transform .2s, box-shadow .2s; }
+        .summary-card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px rgba(18,49,82,.12); }
+        .summary-icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 1.15rem; }
+        .summary-value { font-size: 1.75rem; line-height: 1; }
+        .toolbar { background: white; border: 1px solid var(--line); border-radius: 14px; padding: 10px; box-shadow: 0 5px 18px rgba(18,49,82,.05); }
+        .filter-btn { border-radius: 9px; font-size: .85rem; border-color: transparent; color: var(--muted); padding: 8px 14px; }
+        .filter-btn:hover { background: var(--navy-pale); color: var(--navy); }
         .btn-navy { background: var(--navy); color: white; border: none; }
         .btn-navy:hover { background: var(--navy-mid); color: white; }
+        .repair-card { border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 5px 18px rgba(18,49,82,.05); margin-bottom: 14px; transition: transform .2s, box-shadow .2s; border-left: 4px solid transparent; overflow: hidden; }
+        .repair-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+        .repair-card[data-status="pending"] { border-left-color: #2d628f; }
+        .repair-card[data-status="in_progress"] { border-left-color: var(--gold); }
+        .repair-card[data-status="done"] { border-left-color: #2e7d52; }
+        .status-pill { font-size: .76rem; font-weight: 700; padding: 6px 11px; border-radius: 8px; white-space: nowrap; }
+        .status-pending { background: #e8f0f8; color: #1b3a6b; }
+        .status-in_progress { background: #fdf2df; color: #9a6915; }
+        .status-done { background: #e6f4ec; color: #2e7d52; }
+        .cat-badge { font-size: .75rem; background: var(--navy-pale); color: var(--navy); padding: 4px 9px; border-radius: 6px; font-weight: 700; }
+        .repair-img { width: 78px; height: 78px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid var(--line); transition: transform .2s; }
+        .repair-img:hover { transform: scale(1.04); }
         .modal-header-navy { background: var(--navy); color: white; border-bottom: 3px solid var(--gold); }
-        footer { background: var(--navy); color: rgba(255,255,255,0.6); }
+        .form-control, .form-select { border-color: var(--line); border-radius: 9px; padding: 10px 12px; }
+        .form-control:focus, .form-select:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(45,98,143,.14); }
+        footer { background: var(--navy-deep); color: rgba(255,255,255,.65); }
+        @media (max-width: 575.98px) { .navbar-main .container { padding-left: 18px !important; padding-right: 18px !important; } .brand-copy small { display: none; } .brand-copy span { font-size: .9rem; } .page-intro { padding: 22px 0 36px; } .content-wrap { margin-top: -16px; } .toolbar { padding: 8px; } .filter-btn { flex: 1 1 calc(50% - 8px); } .repair-card .card-body { padding: 18px !important; } .status-pill { font-size: .7rem; } }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-main py-3">
         <div class="container px-4 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-3">
-                <div class="bg-gold text-white rounded-circle d-flex align-items-center justify-content-center" style="width:40px;height:40px;background:rgba(201,146,42,0.2)">
+                <div class="brand-mark text-white rounded-circle d-flex align-items-center justify-content-center">
                     <i class="bi bi-wrench-adjustable text-warning fs-5"></i>
                 </div>
-                <div>
+                <div class="brand-copy">
                     <span class="fw-bold text-white d-block">หน้าช่างซ่อมบำรุง</span>
                     <small class="text-white-50">โรงเรียนสรรพวิทยาคม</small>
                 </div>
@@ -51,31 +65,40 @@
         </div>
     </nav>
 
-    <div class="container px-4 mt-4 flex-grow-1">
+    <section class="page-intro">
+        <div class="container px-4">
+            <p class="text-uppercase small fw-semibold mb-2 opacity-75" style="letter-spacing:.12em">Technician workspace</p>
+            <h1 class="h3 fw-bold mb-1">จัดการงานแจ้งซ่อม</h1>
+            <p class="mb-0 opacity-75">ติดตาม รับงาน และอัปเดตสถานะงานซ่อมในที่เดียว</p>
+        </div>
+    </section>
+
+    <div class="container px-4 content-wrap flex-grow-1">
         <!-- Summary -->
         <div class="row g-3 mb-4">
             <div class="col-4">
-                <div class="card border-0 rounded-3 p-3 text-center" style="background:#E8F0F8">
-                    <h3 class="fw-bold mb-0" id="cntPending" style="color:#1B3A6B">-</h3>
-                    <small class="text-muted">รอรับเรื่อง</small>
+                <div class="summary-card p-3 d-flex align-items-center gap-3">
+                    <div class="summary-icon" style="background:#e8f0f8;color:#1b3a6b"><i class="bi bi-inbox"></i></div>
+                    <div><h3 class="summary-value fw-bold mb-1" id="cntPending" style="color:#1B3A6B">-</h3><small class="text-muted">รอรับเรื่อง</small></div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="card border-0 rounded-3 p-3 text-center" style="background:#FEF3E2">
-                    <h3 class="fw-bold mb-0" id="cntInProgress" style="color:#C9922A">-</h3>
-                    <small class="text-muted">กำลังทำ</small>
+                <div class="summary-card p-3 d-flex align-items-center gap-3">
+                    <div class="summary-icon" style="background:#fef3e2;color:#c9922a"><i class="bi bi-tools"></i></div>
+                    <div><h3 class="summary-value fw-bold mb-1" id="cntInProgress" style="color:#C9922A">-</h3><small class="text-muted">กำลังทำ</small></div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="card border-0 rounded-3 p-3 text-center" style="background:#E6F4EC">
-                    <h3 class="fw-bold mb-0" id="cntDone" style="color:#2E7D52">-</h3>
-                    <small class="text-muted">เสร็จแล้ว</small>
+                <div class="summary-card p-3 d-flex align-items-center gap-3">
+                    <div class="summary-icon" style="background:#e6f4ec;color:#2e7d52"><i class="bi bi-check2-circle"></i></div>
+                    <div><h3 class="summary-value fw-bold mb-1" id="cntDone" style="color:#2E7D52">-</h3><small class="text-muted">เสร็จแล้ว</small></div>
                 </div>
             </div>
         </div>
 
         <!-- Filter -->
-        <div class="d-flex gap-2 mb-4 flex-wrap">
+        <div class="toolbar d-flex align-items-center gap-2 mb-4 flex-wrap">
+            <span class="small fw-bold text-muted me-1"><i class="bi bi-funnel me-1"></i>แสดงงาน</span>
             <button class="btn btn-navy filter-btn" onclick="filterStatus('all', this)">ทั้งหมด</button>
             <button class="btn btn-outline-secondary filter-btn" onclick="filterStatus('pending', this)">รอรับเรื่อง</button>
             <button class="btn btn-outline-secondary filter-btn" onclick="filterStatus('in_progress', this)">กำลังดำเนินการ</button>
