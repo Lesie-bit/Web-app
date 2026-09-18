@@ -15,9 +15,9 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                system_instruction: { parts: [{ text: 'คุณคือผู้ช่วยของระบบแจ้งซ่อมบำรุงโรงเรียนสรรพวิทยาคม ตอบเป็นภาษาไทย สุภาพ กระชับ และช่วยแนะนำขั้นตอนแจ้งซ่อม/ติดตามสถานะ หากไม่ทราบข้อมูลเฉพาะให้บอกผู้ใช้ให้ติดต่อเจ้าหน้าที่ ห้ามแต่งข้อมูลสถานะงานหรือข้อมูลส่วนตัวขึ้นเอง' }] },
+                system_instruction: { parts: [{ text: 'คุณคือผู้ช่วยของระบบแจ้งซ่อมบำรุงโรงเรียนสรรพวิทยาคม ตอบเป็นภาษาไทย สุภาพ กระชับ และช่วยแนะนำขั้นตอนแจ้งซ่อม/ติดตามสถานะ หากไม่ทราบข้อมูลเฉพาะให้บอกผู้ใช้ให้ติดต่อเจ้าหน้าที่ ห้ามแต่งข้อมูลสถานะงานหรือข้อมูลส่วนตัวขึ้นเอง ตอบให้จบเป็นประโยคสมบูรณ์ ห้ามหยุดกลางประโยค' }] },
                 contents: [{ role: 'user', parts: [{ text: message }] }],
-                generationConfig: { temperature: 0.4, maxOutputTokens: 500 }
+                generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
             })
         })
         const rawBody = await response.text()
