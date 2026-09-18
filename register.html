@@ -23,6 +23,7 @@
         .btn-navy { background: var(--navy); color: white; border: none; padding: 0.75rem; font-weight: 600; border-radius: 8px; transition: all 0.2s; }
         .btn-navy:hover { background: var(--navy-mid); color: white; transform: translateY(-1px); }
         .btn-navy:disabled { background: #8899BB; color: white; transform: none; }
+        #otpStep { display: none; }
         footer { background: rgba(0,0,0,0.2); color: rgba(255,255,255,0.6); }
         a { color: var(--navy-light); }
     </style>
@@ -61,6 +62,11 @@
                             <input type="password" class="form-control" id="password" placeholder="อย่างน้อย 6 ตัวอักษร" required>
                         </div>
                     </div>
+                    <div class="mb-4" id="otpStep">
+                        <label class="form-label fw-semibold text-secondary small">รหัส OTP</label>
+                        <input type="text" class="form-control text-center fs-4" id="otp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="กรอกรหัส 6 หลัก">
+                        <small class="text-muted">ตรวจสอบรหัส OTP ในอีเมลของคุณ รหัสมีอายุ 10 นาที</small>
+                    </div>
                     <div class="d-grid mb-3">
                         <button type="submit" class="btn btn-navy btn-lg" id="submitBtn">
                             <i class="bi bi-person-check me-2"></i>สมัครสมาชิก
@@ -78,33 +84,51 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector('form').addEventListener('submit', async function(e) {
+        const form = document.querySelector('form')
+        const otpStep = document.getElementById('otpStep')
+        let otpSent = false
+
+        form.addEventListener('submit', async function(e) {
             e.preventDefault()
-            const name = document.getElementById('name').value
-            const email = document.getElementById('email').value
+            const name = document.getElementById('name').value.trim()
+            const email = document.getElementById('email').value.trim().toLowerCase()
             const password = document.getElementById('password').value
+            const otp = document.getElementById('otp').value.trim()
             const btn = document.getElementById('submitBtn')
             btn.disabled = true
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>กำลังสมัคร...'
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>${otpSent ? 'กำลังยืนยัน...' : 'กำลังส่ง OTP...'}`
             try {
-                const res = await fetch('/api/auth/register', {
+                const endpoint = otpSent ? '/api/auth/verify-otp' : '/api/auth/register'
+                const body = otpSent ? { email, otp } : { name, email, password }
+                const res = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
+                    body: JSON.stringify(body)
                 })
                 const data = await res.json()
                 if (data.success) {
-                    alert('สมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ')
-                    window.location.href = '/login.html'
+                    if (otpSent) {
+                        alert('ยืนยันอีเมลและสมัครสมาชิกสำเร็จ กรุณาเข้าสู่ระบบ')
+                        window.location.href = '/login.html'
+                    } else {
+                        otpSent = true
+                        otpStep.style.display = 'block'
+                        document.getElementById('name').readOnly = true
+                        document.getElementById('email').readOnly = true
+                        document.getElementById('password').readOnly = true
+                        document.getElementById('otp').focus()
+                        btn.disabled = false
+                        btn.innerHTML = '<i class="bi bi-shield-check me-2"></i>ยืนยัน OTP'
+                    }
                 } else {
                     alert(data.error)
                     btn.disabled = false
-                    btn.innerHTML = '<i class="bi bi-person-check me-2"></i>สมัครสมาชิก'
+                    btn.innerHTML = otpSent ? '<i class="bi bi-shield-check me-2"></i>ยืนยัน OTP' : '<i class="bi bi-person-check me-2"></i>สมัครสมาชิก'
                 }
             } catch {
                 alert('เกิดข้อผิดพลาด กรุณาลองใหม่')
                 btn.disabled = false
-                btn.innerHTML = '<i class="bi bi-person-check me-2"></i>สมัครสมาชิก'
+                btn.innerHTML = otpSent ? '<i class="bi bi-shield-check me-2"></i>ยืนยัน OTP' : '<i class="bi bi-person-check me-2"></i>สมัครสมาชิก'
             }
         })
     </script>
