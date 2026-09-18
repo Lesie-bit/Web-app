@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     if (!message) return res.status(400).json({ error: 'กรุณาพิมพ์คำถาม' })
     if (!process.env.GEMINI_API_KEY) return res.status(503).json({ error: 'ยังไม่ได้ตั้งค่า GEMINI_API_KEY ในระบบ' })
 
-    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash'
+    const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash'
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(process.env.GEMINI_API_KEY)}`, {
